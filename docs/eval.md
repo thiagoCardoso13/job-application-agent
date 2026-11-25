@@ -1,5 +1,7 @@
 # Evaluation
 
+30 synthetic emails (16 EN, 14 ES), written by the author, so they are cleaner than a real inbox. Treat 100% as "the pipeline works", not as a production accuracy claim. The baseline's company/role/due rows are not meaningful (it only predicts the category). Reproduce with `python -m job_agent.evaluate --baseline --out docs/eval.md`.
+
 ### Keyword baseline (category only)
 
 | Metric | Score |

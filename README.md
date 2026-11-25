@@ -7,7 +7,7 @@ An AI agent that reads recruiter emails, classifies them (interview, test, rejec
 ## Status
 
 - [x] Milestone 1: skeleton, 30 synthetic labelled emails (EN/ES), CSV tracker, CI
-- [ ] Milestone 2: classifier + eval
+- [x] Milestone 2: Gemini classifier (structured output, model fallbacks) + eval: 100% on the synthetic set vs 63% for a keyword baseline, see [docs/eval.md](docs/eval.md)
 - [ ] Milestone 3: agent graph
 - [ ] Milestone 4: Gmail + Sheets adapters
 - [ ] Milestone 5: Streamlit UI
@@ -22,3 +22,10 @@ ruff check . && pytest -q
 ```
 
 All demo emails are synthetic (`demo_data/emails.json`); no real personal data is in this repo.
+
+## Run the eval
+
+```bash
+cp .env.example .env   # add your free Google AI Studio key
+PYTHONPATH=src python -m job_agent.evaluate --baseline --out docs/eval.md
+```

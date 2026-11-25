@@ -18,7 +18,6 @@ def get_llm(model: str | None = None):
     return ChatGoogleGenerativeAI(
         model=model or os.getenv("LLM_MODEL", DEFAULT_MODEL),
         google_api_key=os.getenv("GOOGLE_API_KEY"),
-        temperature=0,
         timeout=60,
         max_retries=1,
     )
