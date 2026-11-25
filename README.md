@@ -4,9 +4,11 @@ An AI agent that reads recruiter emails, **classifies** them (interview, test, r
 
 Built with **Python · LangGraph · Gemini (free tier) · Gmail API (read-only) · Google Sheets · Streamlit**. Everything runs on free tiers.
 
-> 🔗 **Live demo:** [job-application-agent-xxdsl3jntxsgwh9ctxkwbf.streamlit.app](https://job-application-agent-xxdsl3jntxsgwh9ctxkwbf.streamlit.app/)  ·  🎥 **Video:** _coming soon_
+> 🔗 **Live demo:** [job-application-agent-xxdsl3jntxsgwh9ctxkwbf.streamlit.app](https://job-application-agent-xxdsl3jntxsgwh9ctxkwbf.streamlit.app/)
 >
 > The public demo uses **only synthetic emails**. Each visitor gets a small budget of live AI calls to protect the free Gemini quota.
+
+![Demo: run the agent on 30 emails, then the tracker, follow-ups and tool timeline](docs/demo.gif)
 
 ## How it works
 
