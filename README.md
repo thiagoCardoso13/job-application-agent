@@ -1,48 +1,84 @@
-# Job Application Agent
+# 📬 Job Application Agent
 
-An AI agent that reads recruiter emails, classifies them (interview, test, rejection, info request, acknowledgement), updates a tracking sheet and flags follow-ups.
+An AI agent that reads recruiter emails, **classifies** them (interview, test, rejection, info request, acknowledgement), **updates a tracker** and **flags follow-ups**. Built from my own job search: after ~190 applications, replies were scattered across the inbox.
 
-> Work in progress. See [docs/PLAN.md](docs/PLAN.md) for the plan and milestones.
+Built with **Python · LangGraph · Gemini (free tier) · Gmail API (read-only) · Google Sheets · Streamlit**. Everything runs on free tiers.
 
-## Status
+> 🔗 **Live demo:** _coming soon_ · 🎥 **Video:** _coming soon_
+>
+> The public demo uses **only synthetic emails**. Each visitor gets a small budget of live AI calls to protect the free Gemini quota.
 
-- [x] Milestone 1: skeleton, 30 synthetic labelled emails (EN/ES), CSV tracker, CI
-- [x] Milestone 2: Gemini classifier (structured output, model fallbacks) + eval: 100% on the synthetic set vs 63% for a keyword baseline, see [docs/eval.md](docs/eval.md)
-- [x] Milestone 3: agent graph (LangGraph: classify → apply → follow-ups), review queue, status never goes backwards, follow-up drafts (never sent)
-- [x] Milestone 4: read-only Gmail source + Google Sheets tracker (tested with fakes; the real OAuth flow is not exercised yet), see [docs/SETUP.md](docs/SETUP.md)
-- [x] Milestone 5: Streamlit UI (inbox, tracker, follow-ups, review queue, tool timeline, per-session AI-call limit)
-- [ ] Milestone 6: deploy
+## How it works
 
-## Run the tests
+```mermaid
+graph TD;
+    start([emails]) --> classify
+    classify -- "extractions" --> apply
+    classify -- "nothing to apply" --> followups
+    apply --> followups
+    followups --> done([tracker + due soon + drafts + review queue])
+```
+
+| Node | What it does |
+|---|---|
+| `classify` | The model extracts category, company, role and the one date that matters from each email (structured output, falls back to other free models on quota errors). A failure on one email never stops the run |
+| `apply` | Updates the tracker. A later stage is never overwritten by an earlier one (a late "application received" email will not reset an interview), and a rejection is final. Newsletters and alerts are ignored. Missing company/role goes to a **review queue** instead of polluting the tracker |
+| `followups` | Lists actions due in the next 48 h and applications with no news for 10+ days, and **drafts** a follow-up for each (text only) |
+
+### Safety by design
+- **Read-only Gmail** (`gmail.readonly`): the agent cannot send, delete or label anything.
+- Follow-ups are **drafted, never sent**.
+- Low-quality extractions go to a human review queue.
+- The public demo never touches a real inbox. Credentials are git-ignored.
+
+## Evaluation
+
+30 synthetic labelled emails (16 English, 14 Spanish):
+
+| | Category accuracy |
+|---|---|
+| Keyword baseline (generic regex) | 63% (19/30) |
+| LLM classifier (Gemini, structured output) | 100% (30/30), plus 100% on company, role and due date |
+
+The emails are synthetic and cleaner than a real inbox, so read 100% as "the pipeline works", not as a production accuracy claim. Details and reproduction in [docs/eval.md](docs/eval.md).
+
+## Run it
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
-ruff check . && pytest -q
-```
+ruff check . && pytest -q                 # tests need no API key (simulated model)
 
-All demo emails are synthetic (`demo_data/emails.json`); no real personal data is in this repo.
-
-## Run the eval
-
-```bash
-cp .env.example .env   # add your free Google AI Studio key
+cp .env.example .env                       # add a free Google AI Studio key
+streamlit run app.py                       # web demo
+PYTHONPATH=src python -m job_agent.agent   # CLI on the demo emails -> demo_output/tracker.csv
 PYTHONPATH=src python -m job_agent.evaluate --baseline --out docs/eval.md
 ```
 
-## Run the agent on the demo emails
+To use your own Gmail and Google Sheet, follow [docs/SETUP.md](docs/SETUP.md) and read its privacy note first: on the free tier, Google may use submitted text to improve its products.
 
-```bash
-PYTHONPATH=src python -m job_agent.agent --today 2026-11-20
+## Project layout
+
+```
+app.py                  Streamlit demo
+src/job_agent/
+  agent.py              LangGraph graph (classify -> apply -> followups)
+  classifier.py         LLM classifier + keyword baseline
+  tracker.py            CSV tracker (upsert, stale detection)
+  sheets_tracker.py     Google Sheets tracker (same interface)
+  sources.py            Demo and read-only Gmail email sources
+  followups.py          Deadlines, stale applications, drafted messages
+  demo_session.py       Per-visitor state and AI-call budget
+demo_data/emails.json   30 synthetic labelled emails
+tests/                  Unit tests with fake LLM, Gmail and Sheets services
 ```
 
-It writes `demo_output/tracker.csv`, lists deadlines in the next 48 h, applications with no news for 10+ days (with drafted follow-ups) and the emails that need human review.
+## What I learned
+- Tool-style pipelines need **business rules the model cannot be trusted with**: status ordering and a review queue live in code, not in the prompt.
+- Free-tier LLMs hit quota and 503s: model fallbacks and "a failed draft must not abort the run" were needed in practice, not in theory.
+- A first keyword baseline that I had tuned on my own data scored 100%, which proved nothing. A generic one gives an honest comparison.
+- Generated follow-up drafts invented facts about companies until the prompt forbade it.
 
-## Run the web demo
-
-```bash
-streamlit run app.py
-```
-
-- With `demo_data/precomputed.json` present (generated once by `PYTHONPATH=src python scripts/precompute.py`), the sidebar button replays real model answers for all 30 emails at no cost.
-- With a `GOOGLE_API_KEY`, you can also classify single emails live (limited per session by `MAX_LLM_CALLS`, default 10, to protect the free quota).
+## Limits
+- Evaluated on synthetic emails only; real-inbox accuracy is unknown.
+- The real Gmail/Sheets OAuth flow is covered by tests with fake services and has not been exercised against live Google APIs yet.
