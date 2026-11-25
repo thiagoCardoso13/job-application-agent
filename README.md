@@ -9,7 +9,7 @@ An AI agent that reads recruiter emails, classifies them (interview, test, rejec
 - [x] Milestone 1: skeleton, 30 synthetic labelled emails (EN/ES), CSV tracker, CI
 - [x] Milestone 2: Gemini classifier (structured output, model fallbacks) + eval: 100% on the synthetic set vs 63% for a keyword baseline, see [docs/eval.md](docs/eval.md)
 - [x] Milestone 3: agent graph (LangGraph: classify → apply → follow-ups), review queue, status never goes backwards, follow-up drafts (never sent)
-- [ ] Milestone 4: Gmail + Sheets adapters
+- [x] Milestone 4: read-only Gmail source + Google Sheets tracker (tested with fakes; the real OAuth flow is not exercised yet), see [docs/SETUP.md](docs/SETUP.md)
 - [ ] Milestone 5: Streamlit UI
 - [ ] Milestone 6: deploy
 

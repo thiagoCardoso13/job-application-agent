@@ -158,27 +158,37 @@ def main() -> None:
     from pathlib import Path
 
     from job_agent.classifier import LlmClassifier
-    from job_agent.demo_data import load_emails
     from job_agent.llm import get_llm, get_llm_chain
+    from job_agent.sheets_tracker import SheetsTracker
+    from job_agent.sources import DemoSource, GmailSource
     from job_agent.tracker import CsvTracker
 
-    parser = argparse.ArgumentParser(description="Run the agent on the synthetic demo emails.")
-    parser.add_argument("--today", type=date.fromisoformat, default=date(2026, 11, 20))
-    parser.add_argument("--tracker", type=Path, default=Path("demo_output/tracker.csv"))
+    parser = argparse.ArgumentParser(description="Run the agent on demo emails or your Gmail.")
+    parser.add_argument("--source", choices=["demo", "gmail"], default="demo")
+    parser.add_argument("--query", default="newer_than:30d", help="Gmail search query")
+    parser.add_argument("--sheet-id", help="Google Sheet id; omit to use a local CSV")
+    parser.add_argument("--csv", type=Path, default=Path("demo_output/tracker.csv"))
+    parser.add_argument("--today", type=date.fromisoformat, default=None)
     args = parser.parse_args()
 
-    tracker = CsvTracker(args.tracker)
+    if args.source == "gmail":
+        source, today = GmailSource(query=args.query), args.today or date.today()
+    else:
+        source, today = DemoSource(), args.today or date(2026, 11, 20)
+    tracker = SheetsTracker(args.sheet_id) if args.sheet_id else CsvTracker(args.csv)
+    where = f"sheet {args.sheet_id}" if args.sheet_id else str(args.csv)
+
     state = run_agent(
-        load_emails(), LlmClassifier(get_llm_chain()), tracker, get_llm(), today=args.today
+        source.fetch(), LlmClassifier(get_llm_chain()), tracker, get_llm(), today=today
     )
-    print(f"Tracker updated ({len(state['updated'])} changes) -> {args.tracker}")
+    print(f"Tracker updated ({len(state['updated'])} changes) -> {where}")
     print(f"Ignored: {len(state['ignored'])} | Needs review: {len(state['review'])}")
     for item in state["review"]:
         print(f"  review {item['email_id']}: {item['reason']}")
     print("\nDue in the next 48 h:")
     for a in state["due_soon"]:
         print(f"  {a.company} / {a.role}: {a.status.value} on {a.due}")
-    print(f"\nNo news for {10}+ days (drafts, not sent): {len(state['stale'])}")
+    print(f"\nNo news for 10+ days (drafts, not sent): {len(state['stale'])}")
     for company, text in state["drafts"].items():
         print(f"\n--- {company} ---\n{text}")
 
