@@ -1,0 +1,182 @@
+{
+ "e01": {
+  "category": "interview",
+  "company": "Northwind Analytics",
+  "role": "Junior Data Analyst",
+  "due": "2026-11-10"
+ },
+ "e02": {
+  "category": "interview",
+  "company": "Sol Mediterráneo",
+  "role": "Desarrollador Java Junior",
+  "due": "2026-11-12"
+ },
+ "e03": {
+  "category": "interview",
+  "company": "BrightPath",
+  "role": "Backend Developer (Python)",
+  "due": "2026-11-14"
+ },
+ "e04": {
+  "category": "interview",
+  "company": "Data Levante",
+  "role": "Analista de Datos Junior",
+  "due": "2026-11-13"
+ },
+ "e05": {
+  "category": "interview",
+  "company": "CloudCrate",
+  "role": "Junior Software Engineer",
+  "due": "2026-11-18"
+ },
+ "e06": {
+  "category": "interview",
+  "company": "Iberdatos",
+  "role": "Ingeniero de Datos Junior",
+  "due": "2026-11-19"
+ },
+ "e07": {
+  "category": "test",
+  "company": "PixelForge",
+  "role": "Junior Python Developer",
+  "due": "2026-11-11"
+ },
+ "e08": {
+  "category": "test",
+  "company": "Mediterráneo Tech",
+  "role": "Desarrollador Backend",
+  "due": "2026-11-15"
+ },
+ "e09": {
+  "category": "test",
+  "company": "Datawell",
+  "role": "Junior Data Engineer",
+  "due": "2026-11-16"
+ },
+ "e10": {
+  "category": "test",
+  "company": "Costa Blanca Soft",
+  "role": "Analista Programador",
+  "due": "2026-11-20"
+ },
+ "e11": {
+  "category": "rejection",
+  "company": "GreenByte",
+  "role": "Junior Data Analyst",
+  "due": null
+ },
+ "e12": {
+  "category": "rejection",
+  "company": "Alicante Digital",
+  "role": "Desarrollador Web",
+  "due": null
+ },
+ "e13": {
+  "category": "rejection",
+  "company": "StackWave",
+  "role": "Junior Backend Engineer",
+  "due": null
+ },
+ "e14": {
+  "category": "rejection",
+  "company": "Elche Sistemas",
+  "role": "Técnico de Datos",
+  "due": null
+ },
+ "e15": {
+  "category": "rejection",
+  "company": "Lumen Labs",
+  "role": "Junior ML Engineer",
+  "due": null
+ },
+ "e16": {
+  "category": "rejection",
+  "company": "Norte IT",
+  "role": "Desarrollador Full Stack",
+  "due": null
+ },
+ "e17": {
+  "category": "info_request",
+  "company": "OrbitSoft",
+  "role": "Junior Java Developer",
+  "due": "2026-11-12"
+ },
+ "e18": {
+  "category": "info_request",
+  "company": "Vega Baja Consulting",
+  "role": "Analista de BI",
+  "due": "2026-11-17"
+ },
+ "e19": {
+  "category": "info_request",
+  "company": "Quantum Leaf",
+  "role": "Junior Data Scientist",
+  "due": null
+ },
+ "e20": {
+  "category": "acknowledgement",
+  "company": "Fintrail",
+  "role": "Junior Data Analyst",
+  "due": null
+ },
+ "e21": {
+  "category": "acknowledgement",
+  "company": "Levante Software",
+  "role": "Desarrollador Python Junior",
+  "due": null
+ },
+ "e22": {
+  "category": "acknowledgement",
+  "company": "Tidewater",
+  "role": "Junior DevOps Engineer",
+  "due": null
+ },
+ "e23": {
+  "category": "acknowledgement",
+  "company": "Cadena Tech",
+  "role": "Ingeniero de Software Junior",
+  "due": null
+ },
+ "e24": {
+  "category": "acknowledgement",
+  "company": "Helioscale",
+  "role": "Junior Data Engineer",
+  "due": null
+ },
+ "e25": {
+  "category": "acknowledgement",
+  "company": "Huerta Digital",
+  "role": "Programador Junior",
+  "due": null
+ },
+ "e26": {
+  "category": "other",
+  "company": null,
+  "role": null,
+  "due": null
+ },
+ "e27": {
+  "category": "other",
+  "company": null,
+  "role": null,
+  "due": null
+ },
+ "e28": {
+  "category": "other",
+  "company": null,
+  "role": null,
+  "due": null
+ },
+ "e29": {
+  "category": "other",
+  "company": null,
+  "role": null,
+  "due": null
+ },
+ "e30": {
+  "category": "other",
+  "company": null,
+  "role": null,
+  "due": null
+ }
+}
